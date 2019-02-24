@@ -3,8 +3,20 @@ package tree;
 import java.io.File;
 import java.util.LinkedList;
 
+/**
+ * 实现Windows命令行tree命令的部分功能
+ * 删去了对硬盘信息的输出
+ * 增加了对当前目录的输出（即使没有子文件夹）
+ * @author cz
+ * @version 0.9
+ */
 public class Tree {
-	public static void tree(String filename, LinkedList<String> formats) {
+	/**
+	 * tree外部接口的内部实现，递归输出当前文件夹（如果是）中所有子文件
+	 * @param filename 结点文件夹路径
+	 * @param formats 制表符格式栈
+	 */
+	private static void tree(String filename, LinkedList<String> formats) {
 		File[] subFiles = new File(filename).listFiles();
 		for (int i = 0; i < subFiles.length; ++i) {
 			//print format strings
@@ -13,10 +25,10 @@ public class Tree {
 			}
 			//add box drawings
 			if (i == subFiles.length - 1) {
-				System.out.print("����");
+				System.out.print("└─");
 			}
 			else {
-				System.out.print("����");
+				System.out.print("├─");
 			}
 			//give filename
 			System.out.print(subFiles[i].getName());
@@ -28,7 +40,7 @@ public class Tree {
 					formats.add("   ");
 				}
 				else {
-					formats.add("��  ");
+					formats.add("│  ");
 				}
 				tree(subFiles[i].getAbsolutePath(), formats);
 				formats.removeLast();
@@ -40,9 +52,8 @@ public class Tree {
 	}
 	
 	/**
-	 * @author cz
-	 * @param filename The path to root of your file tree
-	 * @return void
+	 * 外部调用的入口，以文件树形式输出路径filename下自身及所有子文件
+	 * @param filename 文件树根路径
 	 */
 	public static void tree(String filename) {
 		File f = new File(filename);
